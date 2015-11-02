@@ -1,0 +1,25 @@
+#topNav {
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
+#origin, #dest, #stoploc {
+	margin-left: 7px;
+	margin-right: 7px;
+	width: 350px;
+}
+
+#stopsec {
+	display: none;
+}
+
+#stoploc {
+	font-weight: normal;
+}
+
+#map {
+	height: 700px;
+}
+
+
+

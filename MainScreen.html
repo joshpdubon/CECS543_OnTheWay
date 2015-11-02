@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>On the Way</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Bootstrap and jQuery libraries -->
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<!-- Local CSS and Javascript -->
+		<link rel="stylesheet" href="MainScreen.css" type="text/css" />
+		<script type="text/javascript" src="InitMap.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<nav id="topNav" class="navbar navbar-default">
+				<div class="container">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">On the Way</a>
+						<div id="navbar">
+							<ul class="nav navbar-nav">
+								<li>
+									<label>Origin:</label>
+									<input id="origin" type="text" />
+								</li>
+								<li>
+									<label>Destination:</label>
+									<input id="dest" type="text" />
+								</li>
+								<li>
+									<input id="findRoute" value="Find Route" type="button" />
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<div id="stopsec" class="col-md-12">
+				<ul class="nav navbar-nav">
+					<li>
+						<label>Stop-Off Location:<label>
+						<input id="stoploc" type="text" />
+					</li>
+					<li>
+						<input id="findStop" value="Find Stop-Off" type="button" />
+					</li>
+				</ul>
+			</div>
+			<div id="map" class="jumbotron">
+			</div>
+		</div>
+
+		<!-- Google Maps API -->
+		<script async defer
+		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaSgMFEjExXyi3Jrlfdo7J49jzix_M41U&libraries=places&callback=initMap">
+		</script>
+	</body>
+</html>
