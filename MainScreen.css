@@ -11,6 +11,11 @@
 
 #stopsec {
 	display: none;
+	padding-bottom: 10px;
+}
+
+#stopsel {
+	display: none;
 }
 
 #stoploc {
@@ -21,5 +26,12 @@
 	height: 700px;
 }
 
+.selCol {
+	width: 75px;
+	text-align: center;
+}
 
-
+.distCol {
+	width: 125px;
+	text-align: center;
+}
