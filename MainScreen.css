@@ -14,7 +14,7 @@
 	padding-bottom: 10px;
 }
 
-#stopsel {
+#stopsel, #scrollNote {
 	display: none;
 }
 
