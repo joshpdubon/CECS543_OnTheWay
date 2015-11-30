@@ -386,6 +386,7 @@ function refreshPage() {
 	location.reload();
 }
 
+// Create a marker on the map and assign it an onclick handler to display the name and address
 function createMarker(place) {
 	var marker = new google.maps.Marker({
 		map: map,
@@ -406,6 +407,7 @@ function createMarker(place) {
 	});
 }
 
+// Remove all markers from the map
 function removeMarkers() {
 	for(var i = 0; i < markers.length; ++i) {
 		markers[i].setMap(null);
