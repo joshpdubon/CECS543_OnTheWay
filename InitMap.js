@@ -154,7 +154,8 @@ function findStopOff() {
 	// Create a place service variable to perform a radar search
 	var service = new google.maps.places.PlacesService(map);
 	service.radarSearch({
-		bounds: new google.maps.LatLngBounds(southwest, northeast),
+		//bounds: new google.maps.LatLngBounds(southwest, northeast),
+		bounds: map.getBounds(),
 		keyword: stop_keyword
 	}, addCandidates);
 }
