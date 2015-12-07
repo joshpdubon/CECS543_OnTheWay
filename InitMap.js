@@ -1,10 +1,12 @@
 // Variable to create map
 var map;
 var csulb = {lat: 33.783, lng: -118.114};
+
+// Variables to limit algorithm to run within the constraints of the API
 var numPoints = 20;
 var numCandidates = 9;
-var result;
 var searchRadius = 1000; // meters
+var result;
 
 // Variables to manipulate the origin, destination, and stop-off points
 var autocomp_origin;
@@ -25,7 +27,12 @@ var stopCandidates;
 var candDetails;
 var markers = [];
 
-// Initializes the map area and assigns autocomplete functions to text boxes
+
+/*
+	Function that initializes the map area and assigns the autocomplete
+	features to the appropriate text boxes. This function is called when
+	the Google Maps API has been loaded.
+*/
 function initMap() {
 	// Initialize the map element centered at CSULB
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -70,9 +77,17 @@ function initMap() {
 	
 	// Set infowindow for markers
 	infowindow = new google.maps.InfoWindow();
-}
+} // End initMap
 
-// Retrieves the origin and destination points from the textboxes and displays the route on the map
+
+/*
+	Function that retrieves the origin and destination points from the text
+	boxes and displays the route on the map. This function also stores
+	information about the path that is genereated such as, the overall
+	distance and  an array of points that lie on the path. It finishes by
+	unhiding the section on the screen that allows the user to enter the
+	stop-off keyword.
+*/
 function findRoute() {
 	// Capture the origin and destination from the textboxes
 	origin_place = autocomp_origin.getPlace();
@@ -105,9 +120,17 @@ function findRoute() {
 			alert(status);
 		}
 	});
-}
+} //End findRoute
 
-// Returns desired number of points along the path and stores them in an array
+
+/*
+	This function is called by findRoue and it is used to retrieved the desired
+	number of points along the path and stores them in an array. In the interest
+	of performance, the number of points are limited by the variable numPoints.
+	
+	@param result is a Google Maps DirectionResult object that stores the path
+		between the user's specified origin and destination points.
+*/
 function getPointsOnPath(result) {
 	var index;
 	var offset;
@@ -128,9 +151,15 @@ function getPointsOnPath(result) {
 	if(result.routes[0].overview_path.length % numPoints != 0) {
 		pathPoints.push(result.routes[0].overview_path[result.routes[0].overview_path.length - 1]);
 	}
-}
+} // End getPointsOnPath
 
-// Function that finds potential stop off locations by performing a radar search
+
+
+/*
+	Function that finds potential stop off locations by performing a radar
+	search through the Google Maps API. It is triggered by the user pushing the
+	Find Stop-Off button.
+*/
 function findStopOff() {
 	
 	// Clear out array that stores the potential stop locations
@@ -158,9 +187,21 @@ function findStopOff() {
 		bounds: map.getBounds(),
 		keyword: stop_keyword
 	}, addCandidates);
-}
+} // End findStopOff
 
-// Stores all of the potential stop off locations in an array and then sorts the array by distance from the path
+
+
+/*
+	Function that stores all of the potential stop off locations in an array
+	and then sorts the array by distance from the path. This is the callback
+	function that is used for the radar search. Due to the limitations of the
+	Google Maps API, only the 9 closest potential stop-off locations are stored
+	in the array for the next step in the algorithm.
+	
+	@param results is a Google Maps API object that stores the information
+		returned by the radar search.
+	@param status is the status code returned by the radar search.
+*/
 function addCandidates(results, status) {
 	// Check status of the search
 	if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -193,9 +234,19 @@ function addCandidates(results, status) {
 	else {
 		alert(status);
 	}
-}
+} // End addCandidates
 
-// Function that calculates the shortest distance between the indicated location and one of the points along the path
+
+
+/*
+	Function that calculates the shortest distance between the indicated
+	location and one of the points along the path. It is used to sort the
+	results of the radar search by their distance to the path.
+	
+	@param searchLoc is a Google Maps API object that stores information
+		one of the locations returned by the radar search.
+	@return The shortest distance in meters to the path.
+*/
 function getShortestDist(searchLoc) {
 	var shortestDist;
 	var compareDist;
@@ -211,9 +262,16 @@ function getShortestDist(searchLoc) {
 	}
 	
 	return shortestDist;
-}
+} // End getShortestDist
 
-// Calculates the total distance for the entire trip through each candidate
+
+
+/*
+	Function that calculates the total distance for the entire trip through
+	each candidate location. It uses the distance matrix to calculate the
+	distances for each location. Only the 5 locations with the shortest
+	overall path is kept and displayed to the user.
+*/
 function getTotalDist() {
 
 	// Obtain list of origins and destinations
@@ -275,9 +333,13 @@ function getTotalDist() {
 			}
 		}
 	);
-}
+} // End getTotalDist
 
-// Displays the top 5 stop off location candidates to the user
+
+
+/*
+	Function that displays the top 5 stop off location candidates to the user.
+*/
 function dispTop5() {
 	// Input distances and names into the correct DOM locations
 	for(var i = 0; i < 5; ++i) {
@@ -300,9 +362,17 @@ function dispTop5() {
 	
 	// Display the section on the webpage to select the suggested stop off location
 	document.getElementById('stopsel').style.display = 'block';
-}
+} // End dispTop5
 
-// Function that uses a PlacesService to get additional details for each location
+
+
+/*
+	Function that uses a PlacesService to get additional details for the
+	indicated candidate location. This information is displayed to the user
+	to aid them in selection.
+
+	@param index is the index of the location in the candDetails array.
+*/
 function addLocDetails(index) {
 	var infoServ = new google.maps.places.PlacesService(map);
 	infoServ.getDetails(candDetails[index][0], function(result, status) {
@@ -313,9 +383,17 @@ function addLocDetails(index) {
 			alert(status);
 		}
 	});
-}
+} // End addLocDetails
 
-// Display the directions with the indicated stop off location added
+
+
+/*
+	Function that displays the directions with the indicated stop off location
+	added to the route.
+	
+	@param index is the index of the user's selected stop-off location in the 
+		candDetails array.
+*/
 function addStop(index) {
 	// Remove markers from map
 	removeMarkers();
@@ -355,39 +433,58 @@ function addStop(index) {
 	
 	// Display the disclaimer
 	document.getElementById('scrollNote').style.display = 'block';
-}
+} // End addStop
+
+
 
 // Event handler for selection 1
 function addStop1() {
 	addStop(1);
 }
 
+
+
 // Event handler for selection 2
 function addStop2() {
 	addStop(2);
 }
+
+
 
 // Event handler for selection 3
 function addStop3() {
 	addStop(3);
 }
 
+
+
 // Event handler for selection 4
 function addStop4() {
 	addStop(4);
 }
+
+
 
 // Event handler for selection 5
 function addStop5() {
 	addStop(5);
 }
 
+
+
 // Event handler for reresh button
 function refreshPage() {
 	location.reload();
 }
 
-// Create a marker on the map and assign it an onclick handler to display the name and address
+
+
+/*
+	Function that creates a marker on the map and assigsn it an onclick
+	handler to display the name and address of the location.
+	
+	@param place is Google Maps API place object.
+*/
 function createMarker(place) {
 	var marker = new google.maps.Marker({
 		map: map,
@@ -406,11 +503,15 @@ function createMarker(place) {
 			}
 		});
 	});
-}
+} // End createMarker
 
-// Remove all markers from the map
+
+
+/*
+	Function that removes all markers from the map.
+*/
 function removeMarkers() {
 	for(var i = 0; i < markers.length; ++i) {
 		markers[i].setMap(null);
 	}
-}
+} // End removeMarkers
